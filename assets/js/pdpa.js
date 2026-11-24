@@ -72,14 +72,14 @@
   }
 
   function applyConsentScripts(consent) {
-    // In production, conditionally load analytics or ad pixels based on consent.preferences
-    if (consent.preferences.analytics) {
-      window.dataLayer = window.dataLayer || [];
-      // Simulated trigger for Google Analytics
-      // console.log('[PDPA Approved] Analytics scripts active');
-    }
-    if (consent.preferences.marketing) {
-      // console.log('[PDPA Approved] Marketing scripts active');
+    // Sync with Google Analytics / Google Tag Manager Consent Mode
+    if (typeof gtag === 'function' && consent && consent.preferences) {
+      gtag('consent', 'update', {
+        'analytics_storage': consent.preferences.analytics ? 'granted' : 'denied',
+        'ad_storage': consent.preferences.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.preferences.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.preferences.marketing ? 'granted' : 'denied'
+      });
     }
   }
 
